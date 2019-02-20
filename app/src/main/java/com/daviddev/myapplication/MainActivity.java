@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         readMode = true;
         readText.setVisibility(View.VISIBLE);
         writeText.setVisibility(View.INVISIBLE);
-        //explanationText.setText("hello");
+        explanationText.setText(R.string.explanationRead);
 
         //Get the NFC adapter to check if the NFC feature is ok.
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -62,6 +62,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
     }
 
+    //Methode to check if NFC feature is enable
     public static boolean isNfcEnable(NfcAdapter nfcAdapter) {
         if (nfcAdapter == null || !nfcAdapter.isEnabled())
             return false;
@@ -73,41 +74,75 @@ public class MainActivity extends Activity implements View.OnClickListener{
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
+        //Check if the new intent is an NFC intent
         if (intent.hasExtra(NfcAdapter.EXTRA_TAG)) {
 
+            //Extract tag object from the intent
             tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
+            //Check the mode is set on readMode or in writeMode
             if(readMode) {
-                String tagContent = ndefReadTag(tag);
-                readText.setText(tagContent);
+                //Read the NFC tag
+                String payloadString = readNdefMessage(tag);
+                //Display it in the readText textBox
+                readText.setText(payloadString);
             }
             else
-                writeNdefMessage(tag, writeText.getText().toString());
+                //Write the NFC tag with the text entered in the writeText textBox
+                writeNdefMessage(tag , writeText.getText().toString());
         }
     }
 
-    protected String ndefReadTag(Tag tag)
+    //Methode to read
+    protected String readNdefMessage(Tag tag)
     {
-        String contentString = "";
-        NdefRecord[] records;
+
+        //Check if the tag object is null
+        if (tag == null) {
+            Toast.makeText(this, "Tag object cannot be null.", Toast.LENGTH_SHORT).show();
+            return "";
+        }
+
+        String payloadString = "";
 
         try {
+            /* Methode to extract NdefString from a cached tag:
+            * Tag
+            *     -> Ndef
+            *             -> NdefMessage
+            *                            -> NdefRecords
+            *                                           -> recordString
+            *  V V V The methode is implemented below V V V
+            */
 
+            //Extract ndef object from the tag
             Ndef ndef = Ndef.get(tag);
-            NdefMessage ndefMessage = ndef.getCachedNdefMessage();
-            records = ndefMessage.getRecords();
 
+            //Extract ndefmessage from the ndef object
+            NdefMessage ndefMessage = ndef.getCachedNdefMessage();
+
+            //Extract ndef records from the ndef message
+            NdefRecord[] records = ndefMessage.getRecords();
+
+            //If records is empty
             if (records.length == 0)
             {
                 return "";
             }
+            //If records is not empty
             else {
+                //Parse records and extract the record string
                 for (NdefRecord Record : records) {
+
                     if (Record.getTnf() == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(Record.getType(), NdefRecord.RTD_TEXT)) {
+                        //Get payload array from the record
                         byte[] contentpayload = Record.getPayload();
+
                         String Encoding = ((contentpayload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
                         int languageCodeLength = contentpayload[0] & 0063;
-                        contentString = new String(contentpayload, languageCodeLength + 1, contentpayload.length - languageCodeLength - 1, Encoding);
+
+                        //Decode payload array and create payloadString.
+                        payloadString = new String(contentpayload, languageCodeLength + 1, contentpayload.length - languageCodeLength - 1, Encoding);
                     }
                 }
             }
@@ -117,31 +152,34 @@ public class MainActivity extends Activity implements View.OnClickListener{
         catch (UnsupportedEncodingException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-        return contentString;
+        return payloadString;
     }
 
     private void writeNdefMessage(Tag tag, String writeText) {
+
+        //Check if the tag object is null
+        if (tag == null) {
+            Toast.makeText(this, "Tag object cannot be null.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
 
-            if (tag == null) {
-                Toast.makeText(this, "Tag object cannot be null.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
+            // Translate string text to ndef message
             NdefRecord ndefRecord = NdefRecord.createTextRecord( null, writeText);
             NdefMessage ndefMessage = new NdefMessage(ndefRecord);
 
             //Acquiring the Ndef object of the tag
             Ndef ndef = Ndef.get(tag);
 
-            //If the tag is not Ndef formatble
+            //If the tag is not Ndef formatble format it
             if (ndef == null) {
                 formatTag(tag, ndefMessage);
             }
             //If the tag is Ndef formatble
             else {
                 ndef.connect();
-
+                //Check if the tag is writable
                 if (!ndef.isWritable()) {
                     Toast.makeText(this, "Tag is not writable!", Toast.LENGTH_SHORT).show();
                     ndef.close();
@@ -159,6 +197,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
     }
 
+    //Methode to format the Tag if it is not in the NDEF format
     private void formatTag(Tag tag, NdefMessage ndefMessage) {
 
         try {
@@ -208,16 +247,18 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     }
 
+    // Disable Catching Nfc Intents
     @Override
     protected void onPause() {
         super.onPause();
         disableCatchingNfcIntents();
     }
 
+    //Enable Catching Nfc intents
     @Override
     protected void onResume() {
         super.onResume();
-        // enableCatchingNfcIntents fcuntion must be called in onResume methode.
+        // enableCatchingNfcIntents function must be called in onResume methode.
         enableCatchingNfcIntents();
     }
 
