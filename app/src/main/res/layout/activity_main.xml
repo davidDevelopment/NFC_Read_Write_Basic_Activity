@@ -49,10 +49,10 @@
         android:text="tcho"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/readText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/changeModeButton" />
+        app:layout_constraintTop_toBottomOf="@+id/changeModeButton"
+        tools:text="tcho" />
 
 </android.support.constraint.ConstraintLayout>

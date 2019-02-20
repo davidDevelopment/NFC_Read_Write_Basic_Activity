@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         readMode = true;
         readText.setVisibility(View.VISIBLE);
         writeText.setVisibility(View.INVISIBLE);
-        explanationText.setText("hello");
+        //explanationText.setText("hello");
 
         //Get the NFC adapter to check if the NFC feature is ok.
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
