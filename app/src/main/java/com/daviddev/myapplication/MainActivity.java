@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         readMode = true;
         readText.setVisibility(View.VISIBLE);
         writeText.setVisibility(View.INVISIBLE);
-        explanationText.setText(R.string.explanationRead);
+        explanationText.setText("hello");
 
         //Get the NFC adapter to check if the NFC feature is ok.
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
             tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-            if(readMode == true) {
+            if(readMode) {
                 String tagContent = ndefReadTag(tag);
                 readText.setText(tagContent);
             }
@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
              */
 
             case R.id.changeModeButton:
-                if (readMode == true) {
+                if (readMode) {
                     changeModeButton.setText("Write mode");
                     readMode = false;
                     readText.setVisibility(View.INVISIBLE);
