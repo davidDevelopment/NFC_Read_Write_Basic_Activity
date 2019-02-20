@@ -12,33 +12,45 @@
         android:layout_height="61dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/readText"
-        android:layout_width="311dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="305dp"
+        android:layout_height="191dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/changeModeButton" />
+        app:layout_constraintTop_toBottomOf="@+id/explanationText" />
 
     <EditText
         android:id="@+id/writeText"
-        android:layout_width="325dp"
-        android:layout_height="78dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="303dp"
+        android:layout_height="69dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/readText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/explanationText" />
+
+    <TextView
+        android:id="@+id/explanationText"
+        android:layout_width="321dp"
+        android:layout_height="163dp"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeModeButton" />
 
 </android.support.constraint.ConstraintLayout>

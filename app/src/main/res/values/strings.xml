@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="explanationWrite">Enter your text bellow and scan a NFC tag.</string>
+    <string name="explanationRead">Scan a tag and the content will be apear bellow:</string>
 </resources>
