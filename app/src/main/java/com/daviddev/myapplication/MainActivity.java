@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     Tag tag;
 
     Button changeModeButton;
-    TextView readText;
+    TextView readText, explanationText;
     EditText writeText;
 
     boolean readMode;
@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
 
         //Serialize layout objects
+        explanationText = findViewById(R.id.explanationText);
         readText = findViewById(R.id.readText);
         writeText = findViewById(R.id.writeText);
 
@@ -50,15 +51,15 @@ public class MainActivity extends Activity implements View.OnClickListener{
         readMode = true;
         readText.setVisibility(View.VISIBLE);
         writeText.setVisibility(View.INVISIBLE);
+        explanationText.setText(R.string.explanationRead);
 
+        //Get the NFC adapter to check if the NFC feature is ok.
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-
         if (isNfcEnable(nfcAdapter) != true) {
             Toast.makeText(this, "Please enable NFC feature", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-
     }
 
     public static boolean isNfcEnable(NfcAdapter nfcAdapter) {
@@ -193,12 +194,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     readMode = false;
                     readText.setVisibility(View.INVISIBLE);
                     writeText.setVisibility(View.VISIBLE);
+                    explanationText.setText(R.string.explanationWrite);
                 }
                 else{
                     changeModeButton.setText("Read mode");
                     readMode = true;
                     readText.setVisibility(View.VISIBLE);
                     writeText.setVisibility(View.INVISIBLE);
+                    explanationText.setText(R.string.explanationRead);
                 }
                 break;
         }
